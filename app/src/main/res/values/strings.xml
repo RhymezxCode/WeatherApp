@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">WeatherApp</string>
+    <string name="cloud">WeatherApp</string>
+    <string name="annot">Find your weather prediction in your city</string>
+    <string name="splash_txt">Quick glance to not allow the weather spoil your day \n instead make it easier</string>
+    <string name="splash_img">Clouds</string>
+    <string name="search">Search</string>
+    <string name="search_city">Search for City</string>
+    <string name="error">Could not retrieve location, enable location permission</string>
+    <string name="today">Today $</string>
+    <string name="cloud_img">Clouds</string>
+    <string name="unit">hpa</string>
+    <string name="unit_hu">%</string>
+    <string name="unit_wind">km/h</string>
+
+</resources>
