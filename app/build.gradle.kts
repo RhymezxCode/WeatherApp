@@ -12,7 +12,7 @@ android {
 
     defaultConfig {
         applicationId = "com.zseni.weatherapp"
-        minSdk = 26
+        minSdk = 21
         targetSdk = 33
         versionCode = 1
         versionName = "1.0"
@@ -82,6 +82,8 @@ dependencies {
 
     // retrofit and moshi dependencies
     implementation ("com.squareup.okhttp3:okhttp:4.11.0")
+    implementation ("com.squareup.okhttp3:logging-interceptor:4.10.0")
+
     implementation ("com.squareup.retrofit2:retrofit:$retrofitVersion")
 //    implementation ("com.squareup.retrofit2:converter-moshi:$retrofitVersion")
 //    implementation ("com.squareup.moshi:moshi:$moshiVersion")
