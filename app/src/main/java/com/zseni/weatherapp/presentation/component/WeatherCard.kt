@@ -1,4 +1,4 @@
-package com.zseni.weatherapp.presentation
+package com.zseni.weatherapp.presentation.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement

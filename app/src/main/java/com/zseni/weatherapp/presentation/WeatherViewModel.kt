@@ -1,58 +1,56 @@
 package com.zseni.weatherapp.presentation
 
+
+import android.content.Context
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
+//import androidx.lifecycle.viewModelScope
 import com.zseni.weatherapp.domain.location.LocationTracker
+import com.zseni.weatherapp.domain.model.WeatherData
 import com.zseni.weatherapp.domain.repository.WeatherRepository
-import com.zseni.weatherapp.domain.util.Resource
+import com.zseni.weatherapp.domain.usecase.GetWeatherUseCase
+import com.zseni.weatherapp.presentation.component.WeatherState
+import com.zseni.weatherapp.util.Resource
+import dagger.hilt.android.internal.Contexts.getApplication
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
+import kotlin.jvm.internal.Intrinsics.Kotlin
 
 @HiltViewModel
 class WeatherViewModel @Inject constructor(
-    private val repository: WeatherRepository,
-    private val locationTracker: LocationTracker
+   private val getWeatherUseCase: GetWeatherUseCase,
 ):ViewModel() {
+   private var _weatherData = MutableLiveData<WeatherData>()
+    val weatherData: LiveData<WeatherData> get() = _weatherData
 
-    var state by mutableStateOf(WeatherState())
-        private set
-
-    fun loadWeatherInfo(){
+    fun getWeatherData(
+        context: Context,
+        latitude:Double,
+        longitude:Double
+    ){
         viewModelScope.launch {
-            state = state.copy(
-                isLoading = true,
-                error = null
+            _weatherData.postValue(
+                getWeatherUseCase.execute(context,latitude,longitude)
             )
-            locationTracker.getCurrentLocation()?.let { location ->
-            when(val result = repository.getWeatherData(location.latitude, location.longitude)){
-                is Resource.Success ->{
-                    state = state.copy(
-                        weatherInfo = result.data,
-                        isLoading = false,
-                        error = null
-                    )
-                }
-                is Resource.Error ->{
-                    state = state.copy(
-                        weatherInfo = null,
-                        isLoading = false,
-                        error = result.message
-                    )
-                }
-            }
-
-            }?: kotlin.run {
-               state = state.copy(
-                   isLoading = false,
-                   error = "Could not retrieve location, enable location permission"
-               )
-            }
         }
+
     }
 
 
 }
+
+
+
+
+

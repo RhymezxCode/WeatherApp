@@ -4,8 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.zseni.weatherapp.presentation.WeatherCard
-import com.zseni.weatherapp.presentation.WeatherState
+import com.zseni.weatherapp.presentation.component.WeatherCard
+import com.zseni.weatherapp.presentation.component.WeatherState
 import com.zseni.weatherapp.presentation.screens.SplashScreen
 
 @Composable

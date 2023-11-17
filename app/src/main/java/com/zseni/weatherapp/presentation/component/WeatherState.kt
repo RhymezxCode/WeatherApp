@@ -1,4 +1,4 @@
-package com.zseni.weatherapp.presentation
+package com.zseni.weatherapp.presentation.component
 
 import com.zseni.weatherapp.domain.weather.WeatherInfo
 

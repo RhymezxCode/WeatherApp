@@ -1,23 +1,33 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("com.google.devtools.ksp")
     kotlin("kapt")
     id("com.google.dagger.hilt.android")
     id ("org.jetbrains.kotlin.plugin.serialization")
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
+    id ("kotlin-parcelize")
 }
 
 android {
     namespace = "com.zseni.weatherapp"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.zseni.weatherapp"
-        minSdk = 21
+        minSdk = 24
         targetSdk = 33
         versionCode = 1
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField(
+            "String",
+            "API_KEY",
+            "\"${gradleLocalProperties(rootDir).getProperty("API_KEY")}\""
+        )
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -41,6 +51,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.4.3"
@@ -58,7 +69,7 @@ dependencies {
 
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
-    implementation("androidx.activity:activity-compose:1.7.0")
+    implementation("androidx.activity:activity-compose:1.8.0")
     implementation(platform("androidx.compose:compose-bom:2023.06.00"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
@@ -73,21 +84,28 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
     // compose-navigation dependencies
-    implementation ("androidx.navigation:navigation-compose:2.6.0")
-    implementation ("androidx.hilt:hilt-navigation-compose:1.1.0-alpha01")
+    implementation ("androidx.navigation:navigation-compose:2.7.4")
+    implementation ("androidx.hilt:hilt-navigation-compose:1.1.0-rc01")
+
+    // database - Room
+    implementation("androidx.room:room-ktx:2.6.0")
+    ksp("androidx.room:room-compiler:2.6.0")
+    //kapt("androidx.room:room-compiler:2.5.2")
+
+    //Coroutines
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
 
     // viewModel-compose dependencies
     implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
     implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
+    implementation ("androidx.lifecycle:lifecycle-livedata-ktx:2.6.2")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.2")
+    kapt("androidx.lifecycle:lifecycle-compiler:2.6.2")
 
-    // retrofit and moshi dependencies
+    // retrofit and gson,okhttp dependencies
     implementation ("com.squareup.okhttp3:okhttp:4.11.0")
-    implementation ("com.squareup.okhttp3:logging-interceptor:4.10.0")
-
+    implementation ("com.squareup.okhttp3:logging-interceptor:4.11.0")
     implementation ("com.squareup.retrofit2:retrofit:$retrofitVersion")
-//    implementation ("com.squareup.retrofit2:converter-moshi:$retrofitVersion")
-//    implementation ("com.squareup.moshi:moshi:$moshiVersion")
-//    implementation ("com.squareup.moshi:moshi-kotlin:$moshiVersion")
     implementation ("com.google.code.gson:gson:2.9.0")
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
 
@@ -96,7 +114,7 @@ dependencies {
     kapt("com.google.dagger:hilt-android-compiler:2.44")
 
     //Location Services
-    implementation ("com.google.android.gms:play-services-location:21.0.1")
+    implementation ("com.google.android.gms:play-services-location:20.0.0")
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
 

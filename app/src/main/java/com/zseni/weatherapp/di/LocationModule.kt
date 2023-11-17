@@ -16,5 +16,7 @@ abstract class LocationModule {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Binds
     @Singleton
-    abstract fun bindLocationTracker(defaultLocationTracker: DefaultLocationTracker):LocationTracker
+    abstract fun bindLocationTracker(
+        defaultLocationTracker: DefaultLocationTracker
+    ):LocationTracker
 }

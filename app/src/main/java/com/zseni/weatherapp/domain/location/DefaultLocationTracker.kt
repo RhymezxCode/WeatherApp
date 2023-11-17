@@ -8,6 +8,7 @@ import android.location.Location
 import android.location.LocationManager
 import androidx.core.content.ContextCompat
 import com.google.android.gms.location.FusedLocationProviderClient
+import com.zseni.weatherapp.util.Resource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.suspendCancellableCoroutine
 import javax.inject.Inject
@@ -36,16 +37,20 @@ class DefaultLocationTracker @Inject constructor(
                 locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
 
         if (!hasAccessFineLocationPermission || !hasAccessCoarseLocationPermission || !isGpsEnabled) {
-            return null
+            Resource.Error(
+                data = null,
+                message = "Please make sure you enable location permission"
+            )
+
         }
 
         return suspendCancellableCoroutine { cont ->
             locationClient.lastLocation.apply {
                 if (isComplete) {
-                    if (isSuccessful) {
+                    if (isSuccessful)
                         cont.resume(result)
-                    } else {
-                        cont.resume(null)
+                     else {
+                        cont.resume(result)
                     }
                     return@suspendCancellableCoroutine
                 }

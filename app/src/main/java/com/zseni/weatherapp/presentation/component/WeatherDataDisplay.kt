@@ -1,4 +1,4 @@
-package com.zseni.weatherapp.presentation
+package com.zseni.weatherapp.presentation.component
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer

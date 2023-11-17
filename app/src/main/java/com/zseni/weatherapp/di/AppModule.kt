@@ -3,13 +3,14 @@ package com.zseni.weatherapp.di
 import android.app.Application
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import com.zseni.weatherapp.data.api.WeatherApi
+import com.zseni.weatherapp.data.api.RemoteDataSource
+import com.zseni.weatherapp.data.api.WeatherApiService
+import com.zseni.weatherapp.util.AppComponents.BASE_URL
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
-import okhttp3.internal.platform.android.AndroidLogHandler.setLevel
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -18,20 +19,18 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Provider
 import javax.inject.Singleton
 
+
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule{
-    //        val moshi = Moshi.Builder()
-//            .add(KotlinJsonAdapterFactory())
-//            .build()
 
     @Provides
     @Singleton
-    fun provideWeatherApi(
+    fun provideWeatherApiService(
        okHttpClient: OkHttpClient
-    ):WeatherApi{
+    ): WeatherApiService {
         return Retrofit.Builder()
-            .baseUrl("https://api.open-meteo.com/")
+            .baseUrl(BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
@@ -62,4 +61,10 @@ object AppModule{
         HttpLoggingInterceptor().apply {
             setLevel(HttpLoggingInterceptor.Level.BODY)
         }
+
+    @Provides
+    @Singleton
+    fun provideRemoteDataSource(weatherApiService: WeatherApiService):RemoteDataSource{
+        return RemoteDataSource(weatherApiService)
+    }
 }
